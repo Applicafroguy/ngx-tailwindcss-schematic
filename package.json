@@ -1,0 +1,33 @@
+{
+  "name": "ngx-tailwindcss",
+  "version": "0.0.0",
+  "description": "A blank schematics",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:sch": "yarn build && schematics .:ng-add",
+    "clean": "git checkout HEAD -- test-ngx-tailwind && git clean -f -d test-ngx-tailwind",
+    "link:schematic": "yarn link && cd test-ngx-tailwind && yarn link \"ngx-tailwindcss\"",
+    "sandbox:ng-add": "cd test-ngx-tailwind && ng g ngx-tailwind-schematics:ng-add",
+    "test": "yarn clean && yarn test-ngx-tailwind:ng-add && yarn test:test-ngx-tailwind",
+    "test:unit": "yarn build && jasmine src/**/*_spec.js",
+    "test:sandbox": "cd test-ngx-tailwind && yarn lint && yarn test && yarn build"
+  },
+  "keywords": [
+    "schematics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "^9.0.2",
+    "@angular-devkit/schematics": "^9.0.2",
+    "@angular/cdk": "^9.0.0",
+    "@schematics/angular": "^9.0.2",
+    "typescript": "~3.7.4"
+  },
+  "devDependencies": {
+    "@types/jasmine": "~3.5.0",
+    "@types/node": "^12.11.1",
+    "jasmine": "^3.5.0"
+  }
+}
