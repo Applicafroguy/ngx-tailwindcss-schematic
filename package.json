@@ -3,14 +3,7 @@
   "version": "0.0.0",
   "description": "A blank schematics",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "build:sch": "yarn build && schematics .:ng-add",
-    "clean": "git checkout HEAD -- test-ngx-tailwind && git clean -f -d test-ngx-tailwind",
-    "link:schematic": "yarn link && cd test-ngx-tailwind && yarn link \"ngx-tailwindcss\"",
-    "sandbox:ng-add": "cd test-ngx-tailwind && ng g ngx-tailwind-schematics:ng-add",
-    "test": "yarn clean && yarn test-ngx-tailwind:ng-add && yarn test:test-ngx-tailwind",
-    "test:unit": "yarn build && jasmine src/**/*_spec.js",
-    "test:sandbox": "cd test-ngx-tailwind && yarn lint && yarn test && yarn build"
+    "build": "tsc -p tsconfig.json"
   },
   "keywords": [
     "schematics"
