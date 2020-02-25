@@ -1,6 +1,6 @@
 {
   "name": "@ikamva/ngx-tailwindcss",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "Tailwind CSS angular schematic",
   "scripts": {
     "build": "tsc -p tsconfig.json"
@@ -8,6 +8,10 @@
   "keywords": [
     "schematics"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Applicafroguy/ngx-tailwindcss-schematic"
+  },
   "author": "Sivuyile Magutywa",
   "license": "MIT",
   "schematics": "./src/collection.json",
