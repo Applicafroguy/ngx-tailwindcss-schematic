@@ -43,8 +43,14 @@ export default function(_options: any): Rule {
 // Adds Packages
 function addPackageJsonDependencies(): Rule {
   return (tree: Tree, _context: SchematicContext): Observable<Tree> => {
+    // Gets core version
+    const ngCoreVersionTag = getPackageVersionFromPackageJson(
+      tree,
+      "@angular/core"
+    );
+
     return of(
-      "tailwind",
+      "tailwindcss",
       "postcss-scss",
       "postcss-import",
       "postcss-loader",
@@ -52,10 +58,18 @@ function addPackageJsonDependencies(): Rule {
     ).pipe(
       concatMap(name => getLatestNodeVersion(name)),
       map((npmRegistryPackage: NpmRegistryPackage) => {
+        // Checks Angular Core version
+        const packageVersion =
+          npmRegistryPackage.name === "@angular-builders/custom-webpack"
+            ? ngCoreVersionTag?.startsWith("8", 1)
+              ? "8.4.1"
+              : npmRegistryPackage.version
+            : npmRegistryPackage.version;
+
         const nodeDependency: NodeDependency = {
           type: NodeDependencyType.Dev,
           name: npmRegistryPackage.name,
-          version: npmRegistryPackage.version,
+          version: packageVersion,
           overwrite: false
         };
         addPackageJsonDependency(tree, nodeDependency);
@@ -102,7 +116,7 @@ function updateAngularJsonOptions(options: any) {
       let serveOptionsJson =
         json["projects"][options.project]["architect"]["serve"]["options"];
 
-      serveJson = "@angular-builders/custom-webpack:browser";
+      serveJson = "@angular-builders/custom-webpack:dev-server";
 
       serveOptionsJson = {
         ...serveOptionsJson,
@@ -178,4 +192,22 @@ function addTailwindCSSStyles(options: any) {
     recorder.insertLeft(htmlContent.length, insertion);
     host.commitUpdate(recorder);
   };
+}
+
+/** Gets the version of the specified package by looking at the package.json in the given tree. */
+export function getPackageVersionFromPackageJson(
+  tree: Tree,
+  name: string
+): string | null {
+  if (!tree.exists("package.json")) {
+    return null;
+  }
+
+  const packageJson = JSON.parse(tree.read("package.json")!.toString("utf8"));
+
+  if (packageJson.dependencies && packageJson.dependencies[name]) {
+    return packageJson.dependencies[name];
+  }
+
+  return null;
 }
