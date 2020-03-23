@@ -35,8 +35,18 @@ export default function(_options: any): Rule {
           })
         ])
       ),
-      updateAngularJsonOptions(_options)
+      updateAngularJsonOptions(_options),
+      initTailwind()
     ])(tree, _context);
+  };
+}
+
+// init tailwind
+function initTailwind(): Rule {
+  return (tree: Tree, _context: SchematicContext) => {
+    console.log();
+    _context.logger.debug("✅️ Dependencies installed");
+    return tree;
   };
 }
 
