@@ -11,7 +11,9 @@
     "test:sandbox": "cd sandbox && yarn lint && yarn test && yarn build"
   },
   "keywords": [
-    "schematics"
+    "schematics",
+    "ng-add",
+    "angular"
   ],
   "repository": {
     "type": "git",

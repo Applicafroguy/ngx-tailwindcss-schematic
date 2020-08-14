@@ -15,7 +15,7 @@ export function updateAngularJsonOptions(options: any) {
 
         // Store Builder Configurations
         let configurationsJson =
-        json["projects"][options.project]["architect"]["configurations"];
+        json["projects"][options.project]["architect"]["build"]["configurations"];
 
       // Add Custom webpack build
       builderJson = "@angular-builders/custom-webpack:browser";
