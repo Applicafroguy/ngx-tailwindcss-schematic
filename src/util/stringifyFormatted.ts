@@ -4,6 +4,7 @@ import {
     SchematicsException
 } from "@angular-devkit/schematics";
 import * as semver from 'semver';
+import { getLatestNodeVersion } from "./npmjs";
 
 
 export const stringifyFormatted = (obj: any) => JSON.stringify(obj, null, 2);
@@ -36,14 +37,14 @@ export const addDependencies = (
     deps: { [name: string]: { dev?: boolean; version: string } },
     context: SchematicContext
 ) => {
-  
+
     const packageJson = host.exists('package.json') && safeReadJSON('package.json', host);
 
     if (packageJson === undefined) {
         throw new SchematicsException('Could not locate package.json');
     }
 
-    Object.keys(deps).forEach(depName => {
+    Object.keys(deps).forEach(async depName => {
         const dep = deps[depName];
         if (dep.dev) {
             const existingVersion = packageJson.devDependencies[depName];
@@ -54,8 +55,18 @@ export const addDependencies = (
                 }
             }
             else {
-                packageJson.devDependencies[depName] = dep.version;
-                context.logger.info(`✅️ Added ${packageJson.name} in Dev`);
+
+                try {
+
+                    // Get latest version from npm
+                    const depVersion = await (await getLatestNodeVersion(depName)).version
+
+                    // Add Dependency to package.json file
+                    packageJson.devDependencies[depName] = depVersion;
+                    context.logger.info(`✅️ Added ${depName}@${depVersion} to your devDependency`);
+                } catch (err) {
+
+                }
             }
         }
     });

@@ -4,7 +4,7 @@
   "description": "Tailwind CSS angular schematic",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "build:test": "yarn build && yarn test",
+    "build:test": "yarn build && yarn clean && yarn test",
     "clean": "git checkout HEAD -- sandbox && git clean -f -d sandbox",
     "sandbox:ng-add": "cd sandbox && ng g @ikamva/ngx-tailwindcss:ng-add",
     "link:schematic": "yarn link && cd sandbox && yarn link @ikamva/ngx-tailwindcss",
