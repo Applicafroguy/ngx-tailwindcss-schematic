@@ -1,0 +1,9 @@
+{
+    "defaultDependencies": {
+        "tailwindcss": { "dev": true, "version": "0.0.0" },
+        "postcss-scss": { "dev": true, "version": "0.0.0" },
+        "postcss-import": { "dev": true, "version": "0.0.0" },
+        "postcss-loader": { "dev": true, "version": "0.0.0" },
+        "@angular-builders/custom-webpack": { "dev": true, "version": "0.0.0" }
+    }
+}
