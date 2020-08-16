@@ -3,7 +3,7 @@ import {
   Tree,
   Rule
 } from "@angular-devkit/schematics";
-import { addDependencies } from "../../util/stringifyFormatted";
+import { addDependencies } from "../../util/dependencyUtils";
 import { defaultDependencies } from '../../app/versions.json'
 
 // Adds Packages
