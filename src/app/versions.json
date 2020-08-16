@@ -1,9 +1,9 @@
 {
-    "defaultDependencies": {
-        "tailwindcss": { "dev": true, "version": "0.0.0" },
-        "postcss-scss": { "dev": true, "version": "0.0.0" },
-        "postcss-import": { "dev": true, "version": "0.0.0" },
-        "postcss-loader": { "dev": true, "version": "0.0.0" },
-        "@angular-builders/custom-webpack": { "dev": true, "version": "0.0.0" }
-    }
+  "defaultDependencies": {
+    "tailwindcss": { "dev": true, "version": "1.6.2" },
+    "postcss-scss": { "dev": true, "version": "2.1.1" },
+    "postcss-import": { "dev": true, "version": "12.0.1" },
+    "postcss-loader": { "dev": true, "version": "3.0.0" },
+    "@angular-builders/custom-webpack": { "dev": true, "version": "10.0.0" }
+  }
 }

@@ -4,8 +4,7 @@ import {
   Rule
 } from "@angular-devkit/schematics";
 import { addDependencies } from "../../util/stringifyFormatted";
-import { first } from 'rxjs/operators'
-import { NodePackageInstallTask } from "@angular-devkit/schematics/tasks";
+import { defaultDependencies } from '../../app/versions.json'
 
 // Adds Packages
 export const addPackageJsonDependencies = (): Rule => {
@@ -14,18 +13,9 @@ export const addPackageJsonDependencies = (): Rule => {
 
     addDependencies(
       tree,
+      defaultDependencies,
       context
-    ).pipe(first()).toPromise().then(done => {
-      if (done) {
-        context.addTask(new NodePackageInstallTask());
-      }
-      else {
-        context.logger.info('Done:' + done)
-      }
-
-    });
-
-
+    );
 
   };
 
