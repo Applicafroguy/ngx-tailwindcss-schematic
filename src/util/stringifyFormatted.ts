@@ -3,22 +3,37 @@ import {
     Tree,
     SchematicsException
 } from "@angular-devkit/schematics";
-import * as semver from 'semver';
 import { getLatestNodeVersion } from "./npmjs";
+import { of, Observable } from 'rxjs';
+import { map, concatMap } from 'rxjs/operators';
+import { NpmRegistryPackage } from './npmjs'
+import {
+    addPackageJsonDependency,
+    NodeDependency,
+    NodeDependencyType
+} from "@schematics/angular/utility/dependencies";
+import { getPackageVersionFromPackageJson } from "../ng-add/rules/getPackageVersionFromPackageJson";
 
+const devDependencies = ['', '']
 
 export const stringifyFormatted = (obj: any) => JSON.stringify(obj, null, 2);
 
 export const overwriteIfExists = (
     tree: Tree,
     path: string,
-    content: string
+    content: string,
+    context: SchematicContext
 ) => {
+    context.logger.info('over')
     if (tree.exists(path)) {
         tree.overwrite(path, content);
+        context.logger.info('exist')
+        context.logger.info(content)
     }
     else {
         tree.create(path, content);
+        context.logger.info('create')
+        context.logger.info(content)
     }
 };
 
@@ -34,42 +49,68 @@ export function safeReadJSON(path: string, tree: Tree) {
 
 export const addDependencies = (
     host: Tree,
-    deps: { [name: string]: { dev?: boolean; version: string } },
     context: SchematicContext
-) => {
+): Observable<boolean> => {
 
-    const packageJson = host.exists('package.json') && safeReadJSON('package.json', host);
 
-    if (packageJson === undefined) {
-        throw new SchematicsException('Could not locate package.json');
-    }
+    // Gets core version
+    const ngCoreVersionTag = getPackageVersionFromPackageJson(
+        host,
+        "@angular/core"
+    );
 
-    Object.keys(deps).forEach(async depName => {
-        const dep = deps[depName];
-        if (dep.dev) {
-            const existingVersion = packageJson.devDependencies[depName];
-            if (existingVersion) {
-                if (!semver.intersects(existingVersion, dep.version)) {
-                    context.logger.warn(`⚠️ The ${depName} devDependency specified in your package.json`);
-                    // TODO offer to fix
-                }
-            }
-            else {
+    return of(...devDependencies).pipe(
+        concatMap(name => getLatestNodeVersion(name)),
+        map((npmRegistryPackage: NpmRegistryPackage) => {
 
-                try {
+            // Checks Angular Core version
+            const packageVersion =
+                npmRegistryPackage.name === "@angular-builders/custom-webpack"
+                    ? ngCoreVersionTag?.startsWith("8", 1)
+                        ? "8.4.1"
+                        : npmRegistryPackage.version
+                    : npmRegistryPackage.version;
 
-                    // Get latest version from npm
-                    const depVersion = await (await getLatestNodeVersion(depName)).version
+            const nodeDependency: NodeDependency = {
+                type: NodeDependencyType.Default,
+                name: npmRegistryPackage.name,
+                version: packageVersion,
+                overwrite: false
+            };
+            context.logger.info(`✅️ Added ${npmRegistryPackage.name}@${npmRegistryPackage.version} to your devDependency`);
+            addPackageJsonDependency(host, nodeDependency);
+            return true;
+        })
+    );
 
-                    // Add Dependency to package.json file
-                    packageJson.devDependencies[depName] = depVersion;
-                    context.logger.info(`✅️ Added ${depName}@${depVersion} to your devDependency`);
-                } catch (err) {
+    // const start = async () => {
+    //     await asyncForEach(Object.keys(deps), async (depName: string) => {
+    //         const dep = deps[depName];
+    //         if (dep.dev) {
+    //             const existingVersion = packageJson.devDependencies[depName];
+    //             if (existingVersion) {
+    //                 if (!semver.intersects(existingVersion, dep.version)) {
+    //                     context.logger.warn(`⚠️ The ${depName} devDependency specified in your package.json`);
+    //                     // TODO offer to fix
+    //                 }
+    //             }
+    //             else {
 
-                }
-            }
-        }
-    });
+    //                     // Get latest version from npm
+    //                     const depVersion = await (await getLatestNodeVersion(depName)).version
 
-    overwriteIfExists(host, 'package.json', stringifyFormatted(packageJson));
+    //                     // Add Dependency to package.json file
+    //                     packageJson.devDependencies[depName] = depVersion;
+    //                     // context.logger.info(`${{...packageJson.devDependencies}}`);
+    //                     context.logger.info(`✅️ Added ${depName}@${depVersion} to your devDependency`);
+
+    //             }
+    //         }
+    //     });
+    // }
+
+    // // Start
+    // start()
+
+    // overwriteIfExists(host, 'package.json', stringifyFormatted(packageJson), context);
 };

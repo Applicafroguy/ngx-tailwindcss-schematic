@@ -1,28 +1,32 @@
 import {
-    SchematicContext,
-    Tree,
-    Rule} from "@angular-devkit/schematics";
-import { defaultDependencies } from '../../app/versions.json';
+  SchematicContext,
+  Tree,
+  Rule
+} from "@angular-devkit/schematics";
 import { addDependencies } from "../../util/stringifyFormatted";
-
+import { first } from 'rxjs/operators'
+import { NodePackageInstallTask } from "@angular-devkit/schematics/tasks";
 
 // Adds Packages
-export const addPackageJsonDependencies = () : Rule=> {
-    
- return (tree: Tree, context: SchematicContext) => {
+export const addPackageJsonDependencies = (): Rule => {
 
-    try {
-       
+  return (tree: Tree, context: SchematicContext) => {
+
     addDependencies(
-        tree,
-        {...defaultDependencies},
-        context
-    );
-    } catch (error) {
-        
-    }
-   
-    return tree;
+      tree,
+      context
+    ).pipe(first()).toPromise().then(done => {
+      if (done) {
+        context.addTask(new NodePackageInstallTask());
+      }
+      else {
+        context.logger.info('Done:' + done)
+      }
+
+    });
+
+
+
   };
-  
+
 };

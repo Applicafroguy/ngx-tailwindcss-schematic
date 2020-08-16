@@ -8,7 +8,7 @@ import {
   url,
   apply
 } from "@angular-devkit/schematics";
-import { installDependencies } from "./rules/installDependencies";
+// import { installDependencies } from "./rules/installDependencies";
 import { updateAngularJsonOptions } from "./rules/updateAngularJsonOptions";
 import { addTailwindCSSStyles } from "./rules/addTailwindCSSStyles";
 import { addPackageJsonDependencies } from "./rules/addPackageJsonDependencies";
@@ -19,7 +19,7 @@ export default function(_options: any): Rule {
     return chain([
       addPackageJsonDependencies(),
       addTailwindCSSStyles(_options),
-      installDependencies(),
+      // installDependencies(),
       mergeWith(
         apply(url("./files"), [
           template({
