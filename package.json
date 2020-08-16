@@ -10,7 +10,7 @@
     "link:schematic": "yarn link && cd sandbox && yarn link @ikamva/ngx-tailwindcss",
     "test": "yarn clean && yarn sandbox:ng-add && yarn test:sandbox",
     "test:sandbox": "cd sandbox && yarn lint && yarn test && yarn build",
-    "release": "yarn clean && yarn build && yarn np"
+    "release": "yarn clean && yarn build && yarn np --no-tests"
   },
   "keywords": [
     "schematics",
