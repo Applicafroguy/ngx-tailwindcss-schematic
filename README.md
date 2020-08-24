@@ -8,7 +8,7 @@ This schematic adds Tailwindcss to an Angular project.
 
 ## 🔧 How to Install
 
-To Install using npm, simply do:
+To Install using ```angular cli```, simply do:
 
 ```
 ng add @ikamva/ngx-tailwindcss
