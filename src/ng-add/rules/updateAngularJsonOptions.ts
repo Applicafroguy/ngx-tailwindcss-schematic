@@ -1,21 +1,40 @@
-import { SchematicContext, Tree } from "@angular-devkit/schematics";
-export function updateAngularJsonOptions(options: any) {
+import { SchematicContext, Tree, SchematicsException } from "@angular-devkit/schematics";
+import { Schema } from "../schema";
+
+export function updateAngularJsonOptions(options: Schema) {
   return (_host: Tree, _context: SchematicContext) => {
     if (_host.exists("angular.json")) {
-      const jsonStr = _host.read("angular.json")!.toString("utf-8");
-      const json = JSON.parse(jsonStr);
+
+      // Read angular.json
+      const angularJSON = _host.read("angular.json")!.toString("utf-8");
+
+      // Check if  is an angular cli workspace
+      if (!angularJSON) {
+        throw new SchematicsException("Not an Angular CLI workspace")
+      }
+
+      // Get angular workspace
+      const workspace = JSON.parse(angularJSON);
+
+      // Get Project name
+      const projectName = options.project || workspace.defaultProject;
+
+      _context.logger.log("info", `✅️ Adding Tailwindcss to  ${projectName} project`);
+
+      // Get project
+      const project = workspace.projects[projectName]
 
       // Store Builder Architect
       let builderJson =
-        json["projects"][options.project]["architect"]["build"]["builder"];
+        project["architect"]["build"]["builder"];
 
       // Store Builder Options
       let optionsJson =
-        json["projects"][options.project]["architect"]["build"]["options"];
+        project["architect"]["build"]["options"];
 
-        // Store Builder Configurations
-        let configurationsJson =
-        json["projects"][options.project]["architect"]["build"]["configurations"];
+      // Store Builder Configurations
+      let configurationsJson =
+        project["architect"]["build"]["configurations"];
 
       // Add Custom webpack build
       builderJson = "@angular-builders/custom-webpack:browser";
@@ -29,14 +48,13 @@ export function updateAngularJsonOptions(options: any) {
       };
 
       // Store Serve
-      let serveJson = json["projects"][options.project]["architect"]["serve"];
+      let serveJson = project["architect"]["serve"];
 
       // Store Serve Options
-      let serveOptionsJson =
-        json["projects"][options.project]["architect"]["serve"]["options"];
+      let serveOptionsJson = project["architect"]["serve"]["options"];
 
-        // Store Serve Configurations
-        let serveConfigurations = json["projects"][options.project]["architect"]["serve"]["configurations"];
+      // Store Serve Configurations
+      let serveConfigurations = project["architect"]["serve"]["configurations"];
       serveJson = "@angular-builders/custom-webpack:dev-server";
       serveOptionsJson = {
         ...serveOptionsJson,
@@ -50,20 +68,20 @@ export function updateAngularJsonOptions(options: any) {
        */
 
       // save build changes
-      json["projects"][options.project]["architect"]["build"] = {
+      project["architect"]["build"] = {
         builder: builderJson,
         options: optionsJson,
         configurations: configurationsJson
       };
 
       // write serve changes
-      json["projects"][options.project]["architect"]["serve"] = {
+      project["architect"]["serve"] = {
         builder: serveJson,
         options: serveOptionsJson,
         configurations: serveConfigurations
       };
 
-      _host.overwrite("angular.json", JSON.stringify(json, null, 2));
+      _host.overwrite("angular.json", JSON.stringify(workspace, null, 2));
     } else {
       _context.logger.log("error", "angular.json does not exist");
     }

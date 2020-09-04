@@ -50,6 +50,7 @@ export const addDependencies = async (
         const dep = deps[depName];
         if (dep.dev) {
             const existingVersion = packageJson.devDependencies[depName];
+
             if (existingVersion) {
                 if (!semver.intersects(existingVersion, dep.version)) {
                     context.logger.warn(`⚠️ The ${depName} devDependency specified in your package.json`);
