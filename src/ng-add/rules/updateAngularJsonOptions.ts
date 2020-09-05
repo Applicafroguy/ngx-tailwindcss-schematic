@@ -10,7 +10,7 @@ export function updateAngularJsonOptions(options: Schema) {
 
       // Check if  is an angular cli workspace
       if (!angularJSON) {
-        throw new SchematicsException("Not an Angular CLI workspace")
+        throw new SchematicsException("Not an Angular CLI workspace");
       }
 
       // Get angular workspace
@@ -22,7 +22,7 @@ export function updateAngularJsonOptions(options: Schema) {
       _context.logger.log("info", `✅️ Adding Tailwindcss to  ${projectName} project`);
 
       // Get project
-      const project = workspace.projects[projectName]
+      const project = workspace.projects[projectName];
 
       // Store Builder Architect
       let builderJson =

@@ -6,7 +6,9 @@ import {
   mergeWith,
   template,
   url,
-  apply
+  apply,
+  forEach,
+  FileEntry
 } from "@angular-devkit/schematics";
 import { installDependencies } from "./rules/installDependencies";
 import { updateAngularJsonOptions } from "./rules/updateAngularJsonOptions";
@@ -25,6 +27,13 @@ export default function (_options: any): Rule {
           template({
             INDEX: _options.index,
             name: _options.name
+          }),
+
+          forEach((fileEntry: FileEntry) => {
+            if (tree.exists(fileEntry.path)) {
+              return null;
+            }
+            return fileEntry;
           })
         ])
       ),

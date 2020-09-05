@@ -56,10 +56,9 @@ export const addDependencies = async (
                     context.logger.warn(`⚠️ The ${depName} devDependency specified in your package.json`);
                     // TODO offer to fix
                 }
-                context.logger.info(`is existingVersion:${dep.dev}`);
+                context.logger.info(`✅️ ${depName}:${dep.version} is already added`);
             }
             else {
-
 
                 // Add Dependency to package.json file
                 packageJson.devDependencies[depName] = dep.version;
