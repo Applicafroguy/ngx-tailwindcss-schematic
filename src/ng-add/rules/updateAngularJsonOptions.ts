@@ -1,5 +1,4 @@
 import { SchematicContext, Tree, SchematicsException } from "@angular-devkit/schematics";
-import { buildDefaultPath } from "@schematics/angular/utility/workspace";
 import { Schema } from "../schema";
 
 export function updateAngularJsonOptions(options: Schema) {
@@ -27,7 +26,7 @@ export function updateAngularJsonOptions(options: Schema) {
       const project = workspace.projects[projectName];
 
       // Get SRC Path
-      const srcPath = buildDefaultPath(project);
+      const srcPath = project['sourceRoot'];
 
       // Store Builder Architect
       let builderJson =

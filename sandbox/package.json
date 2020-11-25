@@ -41,6 +41,11 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~3.9.5"
+    "typescript": "~3.9.5",
+    "tailwindcss": "2.0.1",
+    "postcss-scss": "3.0.4",
+    "postcss-import": "13.0.0",
+    "postcss-loader": "4.1.0",
+    "@angular-builders/custom-webpack": "10.0.1"
   }
 }
