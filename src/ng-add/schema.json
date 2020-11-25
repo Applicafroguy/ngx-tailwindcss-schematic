@@ -10,6 +10,26 @@
       "$default": {
         "$source": "projectName"
       }
+    },
+    "workspace": {
+      "description": "The file extension or preprocessor to use for style files.",
+      "type": "string",
+      "default": "nx",
+      "enum": ["ng", "nx"],
+      "x-prompt": {
+        "message": "Which workspace are you using?",
+        "type": "list",
+        "items": [
+          {
+            "value": "ng",
+            "label": "Angular CLI Workspace"
+          },
+          {
+            "value": "nx",
+            "label": "NX Workspace [https://nx.dev/latest/angular/getting-started/why-nx]"
+          }
+        ]
+      }
     }
   },
   "required": [],

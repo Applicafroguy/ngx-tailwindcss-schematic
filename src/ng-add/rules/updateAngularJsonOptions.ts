@@ -1,4 +1,5 @@
 import { SchematicContext, Tree, SchematicsException } from "@angular-devkit/schematics";
+import { buildDefaultPath } from "@schematics/angular/utility/workspace";
 import { Schema } from "../schema";
 
 export function updateAngularJsonOptions(options: Schema) {
@@ -19,10 +20,14 @@ export function updateAngularJsonOptions(options: Schema) {
       // Get Project name
       const projectName = options.project || workspace.defaultProject;
 
+
       _context.logger.log("info", `✅️ Adding Tailwindcss to  ${projectName} project`);
 
       // Get project
       const project = workspace.projects[projectName];
+
+      // Get SRC Path
+      const srcPath = buildDefaultPath(project);
 
       // Store Builder Architect
       let builderJson =
@@ -62,6 +67,11 @@ export function updateAngularJsonOptions(options: Schema) {
           path: "./webpack.config.js"
         }
       };
+
+      // Add tailwindcss style
+      const styles: string[] = optionsJson['styles'];
+      styles.push(`${srcPath}/tailwind/tailwind.css`);
+      optionsJson['styles'] = styles;
 
       /**
        * Write to angular.json
