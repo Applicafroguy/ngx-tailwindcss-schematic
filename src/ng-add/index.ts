@@ -42,7 +42,7 @@ function addConfig(path: string, _context: SchematicContext): Rule {
  */
 function createTailwindCss(): Rule {
   return (tree: Tree) => {
-    tree.create('src/tailwind/tailwind.css',
+    tree.create('src/tailwind/tailwind.scss',
       `@import "tailwindcss/base";\n@import "tailwindcss/components";\n@import "tailwindcss/utilities";`);
     return tree;
   };

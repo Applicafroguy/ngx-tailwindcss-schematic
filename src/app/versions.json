@@ -1,6 +1,7 @@
 {
   "defaultDependencies": {
     "tailwindcss": { "dev": true, "version": "2.0.1" },
+    "postcss": { "dev": true, "version": "8.1.10" },
     "postcss-scss": { "dev": true, "version": "3.0.4" },
     "postcss-import": { "dev": true, "version": "13.0.0" },
     "postcss-loader": { "dev": true, "version": "4.1.0" },

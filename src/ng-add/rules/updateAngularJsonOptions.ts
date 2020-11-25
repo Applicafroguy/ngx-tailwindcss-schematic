@@ -69,7 +69,7 @@ export function updateAngularJsonOptions(options: Schema) {
 
       // Add tailwindcss style
       const styles: string[] = optionsJson['styles'];
-      styles.push(`${srcPath}/tailwind/tailwind.css`);
+      styles.push(`${srcPath}/tailwind/tailwind.scss`);
       optionsJson['styles'] = styles;
 
       /**
