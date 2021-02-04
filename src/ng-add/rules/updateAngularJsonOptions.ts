@@ -20,7 +20,7 @@ export function updateAngularJsonOptions(options: Schema) {
       const projectName = options.project || workspace.defaultProject;
 
 
-      _context.logger.log("info", `✅️ Adding Tailwindcss to  ${projectName} project`);
+      _context.logger.log("info", `✅️ Adding Tailwindcss to ${projectName} project`);
 
       // Get project
       const project = workspace.projects[projectName];
@@ -84,11 +84,11 @@ export function updateAngularJsonOptions(options: Schema) {
       };
 
       // write serve changes
-      project["architect"]["serve"] = {
-        builder: serveJson,
-        options: serveOptionsJson,
-        configurations: serveConfigurations
-      };
+      // project["architect"]["serve"] = {
+      //   builder: serveJson,
+      //   options: serveOptionsJson,
+      //   configurations: serveConfigurations
+      // };
 
       _host.overwrite("angular.json", JSON.stringify(workspace, null, 2));
     } else {

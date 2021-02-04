@@ -5,7 +5,8 @@ import {
   Tree,
   mergeWith,
   url,
-  apply
+  apply,
+  SchematicsException
 } from "@angular-devkit/schematics";
 import { installDependencies } from "./rules/installDependencies";
 import { updateAngularJsonOptions } from "./rules/updateAngularJsonOptions";
@@ -18,7 +19,7 @@ export default function (_options: Schema): Rule {
 
     return chain([
       addPackageJsonDependencies(),
-      createTailwindCss(),
+      createTailwindCss(_options),
       addConfig(`./files/tailwind-config/${_options.workspace}`, _context),
       addConfig('./files/webpack', _context),
       updateAngularJsonOptions(_options),
@@ -40,9 +41,29 @@ function addConfig(path: string, _context: SchematicContext): Rule {
  * Create tailwind.css in source root project
  * adds tailwindcss imports
  */
-function createTailwindCss(): Rule {
+function createTailwindCss(_options: Schema): Rule {
   return (tree: Tree) => {
-    tree.create('src/tailwind/tailwind.scss',
+
+    const angularJSON = tree.read("angular.json")!.toString("utf-8");
+
+    // Check if  is an angular cli workspace
+    if (!angularJSON) {
+      throw new SchematicsException("Not an Angular CLI workspace");
+    }
+
+    // Get angular workspace
+    const workspace = JSON.parse(angularJSON);
+
+    // Get Project name
+    const projectName = _options.project || workspace.defaultProject;
+
+    // Get project
+    const project = workspace.projects[projectName];
+
+    // Get SRC Path
+    const srcPath = project['sourceRoot'];
+
+    tree.create(`${srcPath}/tailwind/tailwind.scss`,
       `@import "tailwindcss/base";\n@import "tailwindcss/components";\n@import "tailwindcss/utilities";`);
     return tree;
   };
