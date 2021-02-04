@@ -2,7 +2,7 @@
 
 ## ℹ️️ Description
 
-This schematic adds Tailwindcss 2x to an Angular project. 
+This schematic adds Tailwindcss 2x to an Angular 11 or NX project. 
 
 <br>
 
