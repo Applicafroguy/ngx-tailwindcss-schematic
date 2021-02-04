@@ -43,7 +43,7 @@ export function updateAngularJsonOptions(options: Schema) {
       // Add Custom webpack build
       builderJson = "@angular-builders/custom-webpack:browser";
 
-      // add custom webpack config
+      // add custom webpack config to build
       optionsJson = {
         ...optionsJson,
         customWebpackConfig: {
@@ -51,20 +51,15 @@ export function updateAngularJsonOptions(options: Schema) {
         }
       };
 
-      // Store Serve
-      let serveJson = project["architect"]["serve"];
 
       // Store Serve Options
       let serveOptionsJson = project["architect"]["serve"]["options"];
 
       // Store Serve Configurations
       let serveConfigurations = project["architect"]["serve"]["configurations"];
-      serveJson = "@angular-builders/custom-webpack:dev-server";
+      let serveJson = "@angular-builders/custom-webpack:dev-server";
       serveOptionsJson = {
-        ...serveOptionsJson,
-        customWebpackConfig: {
-          path: "./webpack.config.js"
-        }
+        ...serveOptionsJson
       };
 
       // Add tailwindcss style
@@ -84,11 +79,11 @@ export function updateAngularJsonOptions(options: Schema) {
       };
 
       // write serve changes
-      // project["architect"]["serve"] = {
-      //   builder: serveJson,
-      //   options: serveOptionsJson,
-      //   configurations: serveConfigurations
-      // };
+      project["architect"]["serve"] = {
+        builder: serveJson,
+        options: serveOptionsJson,
+        configurations: serveConfigurations
+      };
 
       _host.overwrite("angular.json", JSON.stringify(workspace, null, 2));
     } else {
