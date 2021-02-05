@@ -4,7 +4,8 @@
     "postcss": { "dev": true, "version": "8.2.4" },
     "postcss-scss": { "dev": true, "version": "3.0.4" },
     "postcss-import": { "dev": true, "version": "14.0.0" },
-    "postcss-loader": { "dev": true, "version": "5.0.0" },
+    "postcss-loader": { "dev": true, "version": "^4.0.4" },
+    "autoprefixer": { "dev": true, "version": "^10.2.4" },
     "@angular-builders/custom-webpack": { "dev": true, "version": "11.0.0" }
   }
 }
