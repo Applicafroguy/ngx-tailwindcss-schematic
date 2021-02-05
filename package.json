@@ -1,6 +1,6 @@
 {
   "name": "@ikamva/ngx-tailwindcss",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Tailwind CSS angular schematic",
   "scripts": {
     "build": "tsc -p tsconfig.json",
